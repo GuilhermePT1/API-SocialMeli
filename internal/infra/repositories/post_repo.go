@@ -31,6 +31,12 @@ func (r *PostRepository) FindByUserLastTwoWeeks(userID uint) ([]models.Post, err
 	return posts, err
 }
 
+func (r *PostRepository) FindByUser(userID uint) ([]models.Post, error) {
+	var posts []models.Post
+	err := r.DB.Where("user_id = ?", userID).Find(&posts).Error
+	return posts, err
+}
+
 func (r *PostRepository) FindPromoPosts() ([]models.Post, error) {
 	var posts []models.Post
 

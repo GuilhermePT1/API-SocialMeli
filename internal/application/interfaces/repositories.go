@@ -24,6 +24,7 @@ type ProductRepository interface {
 type PostRepository interface {
 	Create(post *models.Post) error
 	FindByUserLastTwoWeeks(userID uint) ([]models.Post, error)
+	FindByUser(userID uint) ([]models.Post, error)
 	FindPromoPosts() ([]models.Post, error)
 	CountPromoProducts() (int64, error)
 }

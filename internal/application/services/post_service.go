@@ -27,6 +27,10 @@ func (s *PostService) FindByUserLastTwoWeeks(userID uint) ([]models.Post, error)
 	return s.Repo.FindByUserLastTwoWeeks(userID)
 }
 
+func (s *PostService) FindByUser(userID uint) ([]models.Post, error) {
+	return s.Repo.FindByUser(userID)
+}
+
 func (s *PostService) FindPromoPosts() ([]models.Post, error) {
 	return s.Repo.FindPromoPosts()
 }
