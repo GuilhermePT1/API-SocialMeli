@@ -1,0 +1,36 @@
+package services
+
+import (
+	"github.com/GuilhermePT1/api-social-meli/internal/application/interfaces"
+	"github.com/GuilhermePT1/api-social-meli/internal/domain/dto"
+	"github.com/GuilhermePT1/api-social-meli/internal/domain/models"
+)
+
+type PostService struct {
+	Repo interfaces.PostRepository
+}
+
+func (s *PostService) Create(req dto.PostRequestDTO) (*models.Post, error) {
+	post := &models.Post{
+		UserID:    req.UserID,
+		ProductID: req.ProductID,
+		Price:     req.Price,
+	}
+	err := s.Repo.Create(post)
+	if err != nil {
+		return nil, err
+	}
+	return post, nil
+}
+
+func (s *PostService) FindByUserLastTwoWeeks(userID uint) ([]models.Post, error) {
+	return s.Repo.FindByUserLastTwoWeeks(userID)
+}
+
+func (s *PostService) FindPromoPosts() ([]models.Post, error) {
+	return s.Repo.FindPromoPosts()
+}
+
+func (s *PostService) CountPromoProducts() (int64, error) {
+	return s.Repo.CountPromoProducts()
+}
