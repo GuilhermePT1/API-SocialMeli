@@ -13,6 +13,10 @@ type ProductController struct {
 	Service *services.ProductService
 }
 
+func NewProductController(service *services.ProductService) *ProductController {
+	return &ProductController{Service: service}
+}
+
 func (c *ProductController) CreateProduct(ctx *gin.Context) {
 	var req dto.ProductRequestDTO
 	if err := ctx.ShouldBindJSON(&req); err != nil {

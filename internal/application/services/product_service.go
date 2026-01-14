@@ -10,6 +10,10 @@ type ProductService struct {
 	Repo interfaces.ProductRepository
 }
 
+func NewProductService(repo interfaces.ProductRepository) *ProductService {
+	return &ProductService{Repo: repo}
+}
+
 func (s *ProductService) Create(req dto.ProductRequestDTO) (*models.Product, error) {
 	product := &models.Product{
 		Name:  req.Name,

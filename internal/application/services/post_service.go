@@ -10,6 +10,10 @@ type PostService struct {
 	Repo interfaces.PostRepository
 }
 
+func NewPostService(repo interfaces.PostRepository) *PostService {
+	return &PostService{Repo: repo}
+}
+
 func (s *PostService) Create(req dto.PostRequestDTO) (*models.Post, error) {
 	post := &models.Post{
 		UserID:    req.UserID,

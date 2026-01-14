@@ -9,6 +9,10 @@ type FollowService struct {
 	Repo interfaces.FollowRepository
 }
 
+func NewFollowService(repo interfaces.FollowRepository) *FollowService {
+	return &FollowService{Repo: repo}
+}
+
 func (s *FollowService) Follow(userID, followerID uint) error {
 	follow := &models.Follow{
 		UserID:     userID,

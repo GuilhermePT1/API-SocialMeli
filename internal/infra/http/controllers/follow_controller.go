@@ -13,6 +13,10 @@ type FollowController struct {
 	Service *services.FollowService
 }
 
+func NewFollowController(service *services.FollowService) *FollowController {
+	return &FollowController{Service: service}
+}
+
 func (c *FollowController) Follow(ctx *gin.Context) {
 	var req dto.FollowRequestDTO
 

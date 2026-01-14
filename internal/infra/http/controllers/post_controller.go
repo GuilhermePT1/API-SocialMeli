@@ -13,6 +13,10 @@ type PostController struct {
 	Service *services.PostService
 }
 
+func NewPostController(service *services.PostService) *PostController {
+	return &PostController{Service: service}
+}
+
 func (c *PostController) CreatePost(ctx *gin.Context) {
 	var req dto.PostRequestDTO
 	if err := ctx.ShouldBindJSON(&req); err != nil {
