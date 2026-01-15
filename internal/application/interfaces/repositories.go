@@ -2,6 +2,13 @@ package interfaces
 
 import "github.com/GuilhermePT1/api-social-meli/internal/domain/models"
 
+// USER
+type UserRepository interface {
+	Create(user *models.User) error
+	FindById(id uint) (*models.User, error)
+	FindAll() ([]models.User, error)
+}
+
 // FOLLOW
 type FollowRepository interface {
 	Create(follow *models.Follow) error

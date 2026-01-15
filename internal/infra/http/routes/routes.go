@@ -14,22 +14,35 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB) {
 	productRepo := repositories.NewProductRepository(db)
 	postRepo := repositories.NewPostRepository(db)
 	followRepo := repositories.NewFollowRepository(db)
+	userRepo := repositories.NewUserRepository(db)
 
 	// Services
 	productService := services.NewProductService(productRepo)
 	postService := services.NewPostService(postRepo)
 	followService := services.NewFollowService(followRepo)
+	userService := services.NewUserService(userRepo)
 
 	// Controllers
 	productController := controllers.NewProductController(productService)
 	postController := controllers.NewPostController(postService)
 	followController := controllers.NewFollowController(followService)
+	userController := controllers.NewUserController(userService)
 
 	api := router.Group("/api")
 	{
 		registerFollowRoutes(api, followController)
 		registerProductRoutes(api, productController)
 		registerPostRoutes(api, postController)
+		registerUserRoutes(api, userController)
+	}
+}
+
+func registerUserRoutes(router *gin.RouterGroup, c *controllers.UserController) {
+	userRoutes := router.Group("/users")
+	{
+		userRoutes.POST("", c.CreateUser)
+		userRoutes.GET("/:user_id", c.GetUserById)
+		userRoutes.GET("", c.GetAllUsers)
 	}
 }
 
