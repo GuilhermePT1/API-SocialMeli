@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/GuilhermePT1/api-social-meli/internal/application/services"
 	"github.com/GuilhermePT1/api-social-meli/internal/domain/dto"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type UserController struct {
@@ -44,13 +46,25 @@ func (c *UserController) GetUserById(ctx *gin.Context) {
 		return
 	}
 
-	user, err := strconv.ParseUint(idStr, 10, 32)
+	id64, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID do usuário inválido"})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	id := uint(id64)
+	u, err := c.Service.GetById(id)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar usuário"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, u)
 }
 
 func (c *UserController) GetAllUsers(ctx *gin.Context) {
