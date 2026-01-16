@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/GuilhermePT1/api-social-meli/internal/application/services"
 	"github.com/GuilhermePT1/api-social-meli/internal/domain/dto"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type ProductController struct {
@@ -40,24 +42,31 @@ func (c *ProductController) CreateProduct(ctx *gin.Context) {
 }
 
 func (c *ProductController) GetProductById(ctx *gin.Context) {
-	productIDStr := ctx.Param("product_id")
-	if productIDStr == "" {
+	idStr := ctx.Param("product_id")
+	if idStr == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "É necessário preencher o id do produto"})
 		return
 	}
 
-	productID, err := strconv.ParseUint(productIDStr, 10, 32)
+	id64, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID do produto inválido"})
 		return
 	}
 
-	product, err := c.Service.GetById(uint(productID))
+	id := uint(id64)
+	p, err := c.Service.GetById(id)
+
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Produto não encontrado"})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar produto"})
 		return
 	}
-	ctx.JSON(http.StatusOK, product)
+
+	ctx.JSON(http.StatusOK, p)
 }
 
 func (c *ProductController) GetAllProducts(ctx *gin.Context) {
