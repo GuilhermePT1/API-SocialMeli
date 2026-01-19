@@ -15,6 +15,14 @@ type ProductController struct {
 	Service *services.ProductService
 }
 
+// @Summary Cria um novo produto
+// @Description Cria um novo produto com os dados fornecidos
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Param product body dto.ProductRequestDTO true "Informações do produto"
+// @Success 201 {object} dto.ProductResponseDTO
+// @Router /api/products [post]
 func NewProductController(service *services.ProductService) *ProductController {
 	return &ProductController{Service: service}
 }
@@ -41,6 +49,14 @@ func (c *ProductController) CreateProduct(ctx *gin.Context) {
 	})
 }
 
+// @Summary Listar um produto por ID
+// @Description Lista um produto específico por ID
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Param product_id path string true "ID do produto"
+// @Success 200 {object} dto.ProductResponseDTO
+// @Router /api/products/{product_id} [get]
 func (c *ProductController) GetProductById(ctx *gin.Context) {
 	idStr := ctx.Param("product_id")
 	if idStr == "" {
@@ -69,6 +85,13 @@ func (c *ProductController) GetProductById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, p)
 }
 
+// @Summary Listar todos os produtos
+// @Description Lista todos os produtos
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Success 200 {object} []dto.ProductResponseDTO
+// @Router /api/products [get]
 func (c *ProductController) GetAllProducts(ctx *gin.Context) {
 	products, err := c.Service.GetAll()
 	if err != nil {

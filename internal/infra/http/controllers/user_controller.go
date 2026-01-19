@@ -15,6 +15,14 @@ type UserController struct {
 	Service *services.UserService
 }
 
+// @Summary Cria um novo usuário
+// @Description Cria um novo usuário com os dados fornecidos
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body dto.UserRequestDTO true "Informações do usuário"
+// @Success 201 {object} dto.UserResponseDTO
+// @Router /api/users [post]
 func NewUserController(service *services.UserService) *UserController {
 	return &UserController{Service: service}
 }
@@ -39,6 +47,14 @@ func (c *UserController) CreateUser(ctx *gin.Context) {
 	})
 }
 
+// @Summary Listar um usuário por ID
+// @Description Lista um usuário específico por ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID do usuário"
+// @Success 200 {object} dto.UserResponseDTO
+// @Router /api/users/{user_id} [get]
 func (c *UserController) GetUserById(ctx *gin.Context) {
 	idStr := ctx.Param("user_id")
 	if idStr == "" {
@@ -67,6 +83,13 @@ func (c *UserController) GetUserById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, u)
 }
 
+// @Summary Listar todos os usuários
+// @Description Lista todos os usuários
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} []dto.UserResponseDTO
+// @Router /api/users [get]
 func (c *UserController) GetAllUsers(ctx *gin.Context) {
 	users, err := c.Service.GetAll()
 	if err != nil {

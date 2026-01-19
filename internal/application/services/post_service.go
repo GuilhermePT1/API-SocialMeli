@@ -15,12 +15,17 @@ func NewPostService(repo interfaces.PostRepository) *PostService {
 }
 
 func (s *PostService) Create(req dto.PostRequestDTO) (*models.Post, error) {
+	discount := req.Price - req.Discount
+	if !req.Promotion {
+		discount = 0
+	}
+
 	post := &models.Post{
 		UserID:       req.UserID,
 		ProductID:    req.ProductID,
 		Price:        req.Price,
 		HasPromotion: req.Promotion,
-		Discount:     req.Discount,
+		Discount:     discount,
 	}
 	err := s.Repo.Create(post)
 	if err != nil {

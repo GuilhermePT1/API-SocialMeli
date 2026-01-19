@@ -13,6 +13,14 @@ type FollowController struct {
 	Service *services.FollowService
 }
 
+// @Summary Seguir um usuário
+// @Description Segue um usuário específico
+// @Tags Follow
+// @Accept json
+// @Produce json
+// @Param follow body dto.FollowRequestDTO true "Informações do usuário a ser seguido"
+// @Success 200 {object} dto.FollowResponseDTO
+// @Router /api/users/follow [post]
 func NewFollowController(service *services.FollowService) *FollowController {
 	return &FollowController{Service: service}
 }
@@ -33,6 +41,14 @@ func (c *FollowController) Follow(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Seguindo com sucesso"})
 }
 
+// @Summary Deixar de seguir um usuário
+// @Description Deixa de seguir um usuário específico
+// @Tags Follow
+// @Accept json
+// @Produce json
+// @Param follow body dto.FollowRequestDTO true "Informações do usuário a ser deixado de seguir"
+// @Success 200 {object} dto.FollowResponseDTO
+// @Router /api/users/unfollow [post]
 func (c *FollowController) Unfollow(ctx *gin.Context) {
 	var req dto.FollowRequestDTO
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -48,6 +64,14 @@ func (c *FollowController) Unfollow(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Deixando de seguir com sucesso"})
 }
 
+// @Summary Contar seguidores de um usuário
+// @Description Conta o número de seguidores de um usuário específico
+// @Tags Follow
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID do usuário"
+// @Success 200 {object} []models.User
+// @Router /api/users/{user_id}/followers/count [get]
 func (c *FollowController) CountFollowers(ctx *gin.Context) {
 	userIDStr := ctx.Param("user_id")
 	if userIDStr == "" {
@@ -69,6 +93,14 @@ func (c *FollowController) CountFollowers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Quantidade de seguidores", "count": count})
 }
 
+// @Summary Listar seguidores de um usuário
+// @Description Lista os seguidores de um usuário específico
+// @Tags Follow
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID do usuário"
+// @Success 200 {object} []models.User
+// @Router /api/users/{user_id}/followers/list [get]
 func (c *FollowController) GetFollowers(ctx *gin.Context) {
 	userIDStr := ctx.Param("user_id")
 	if userIDStr == "" {
@@ -90,6 +122,14 @@ func (c *FollowController) GetFollowers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, followers)
 }
 
+// @Summary Listar usuários seguidos por um usuário
+// @Description Lista os usuários seguidos por um usuário específico
+// @Tags Follow
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID do usuário"
+// @Success 200 {object} []models.User
+// @Router /api/users/{user_id}/followed/list [get]
 func (c *FollowController) GetFollowed(ctx *gin.Context) {
 	userIDStr := ctx.Param("user_id")
 	if userIDStr == "" {

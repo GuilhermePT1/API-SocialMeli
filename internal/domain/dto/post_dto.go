@@ -6,8 +6,8 @@ type PostRequestDTO struct {
 	UserID    uint    `json:"user_id" binding:"required"`
 	ProductID uint    `json:"product_id" binding:"required"`
 	Price     float64 `json:"price" binding:"required"`
-	Promotion bool    `json:"promotion" binding:"required"`
-	Discount  float64 `json:"discount" binding:"required"`
+	Promotion bool    `json:"promotion" default:"false"`
+	Discount  float64 `json:"discount" validate:"required_if=Promotion true,gte=0`
 }
 
 type PostResponseDTO struct {

@@ -13,6 +13,14 @@ type PostController struct {
 	Service *services.PostService
 }
 
+// @Summary Cria um novo post
+// @Description Cria um novo post com os dados fornecidos
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param post body dto.PostRequestDTO true "Informações do post"
+// @Success 201 {object} dto.PostResponseDTO
+// @Router /api/posts [post]
 func NewPostController(service *services.PostService) *PostController {
 	return &PostController{Service: service}
 }
@@ -39,6 +47,14 @@ func (c *PostController) CreatePost(ctx *gin.Context) {
 	})
 }
 
+// @Summary Listar posts de um usuário
+// @Description Lista os posts de um usuário específico
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param user_id path string true "ID do usuário"
+// @Success 200 {object} []dto.PostResponseDTO
+// @Router /api/users/{user_id}/posts [get]
 func (c *PostController) FindByUser(ctx *gin.Context) {
 	userIDStr := ctx.Param("user_id")
 	if userIDStr == "" {
@@ -72,6 +88,13 @@ func (c *PostController) FindByUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Listar posts com promoção
+// @Description Lista os posts com promoção
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Success 200 {object} []dto.PostResponseDTO
+// @Router /api/posts/promo [get]
 func (c *PostController) FindPromoPosts(ctx *gin.Context) {
 	posts, err := c.Service.FindPromoPosts()
 	if err != nil {
@@ -93,6 +116,13 @@ func (c *PostController) FindPromoPosts(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Contar produtos com promoção
+// @Description Conta o número de produtos com promoção
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Success 200 {object} []dto.PostResponseDTO
+// @Router /api/posts/promo/count [get]
 func (c *PostController) CountPromoProducts(ctx *gin.Context) {
 	count, err := c.Service.CountPromoProducts()
 	if err != nil {
